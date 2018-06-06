@@ -45,21 +45,40 @@ jobs:
           path: test-results
 
   android:
-    working_directory: ~/ReactKata/android
+    working_directory: ~/ReactKata
     docker:
       - image: circleci/android:api-27-node8-alpha
+
+    # use a --login shell so our "set Ruby version" command gets picked up for later steps
+    shell: /bin/bash --login -o pipefail
+
     steps:
-      - checkout:
-          path: ~/ReactKata
+      - checkout
 
       - attach_workspace:
           at: ~/ReactKata
 
+      - save_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+          paths:
+            - ~/.cache/yarn
+
+      - save_cache:
+          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+          paths:
+            - node_modules
+
+      - run:
+          name: detox tests
+          command: |
+            mkdir -p test-results/jest
+            yarn run test:detox:android
+
       - store_test_results:
-          path: test-results
+          path: android/test-results
 
       - store_artifacts:
-          path: test-results
+          path: android/test-results
 
   ios:
     macos:
