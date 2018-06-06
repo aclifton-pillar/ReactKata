@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, FlatList, Text, View, StyleSheet, TouchableHighlight} from "react-native";
+import {Button, Platform, FlatList, Text, View, StyleSheet, TouchableHighlight} from "react-native";
 
 type Props = {};
 
@@ -13,7 +13,9 @@ export default class RecipeHome extends Component<Props> {
     }
 
     async getCurrent() {
-        return await fetch('http://127.0.0.1:9000/recipes')
+        const ipAddr = Platform.OS === 'ios' ? '127.0.0.1' : '10.0.2.2';
+
+        return await fetch('http://' + ipAddr +':9000/recipes')
             .then((response) => response.json())
             .then((resJson) => {
                 this.setState({
