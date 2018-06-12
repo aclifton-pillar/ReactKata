@@ -11,6 +11,7 @@ function startServerAsync(port) {
     const app = express();
 
     app.get('/recipes', (req, res) => {
+        console.log("getting recipes");
         res.json(recipes);
     });
 
