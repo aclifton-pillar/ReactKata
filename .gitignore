@@ -2,6 +2,9 @@
 #
 .DS_Store
 
+ReactKata/GoogleService-Info.plist
+ios/ReactKata/GoogleService-Info.plist
+
 coverage
 
 # Xcode

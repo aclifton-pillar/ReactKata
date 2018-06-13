@@ -1,20 +1,11 @@
 import React, {Component} from 'react';
-import {Platform, FlatList, Text, View, StyleSheet, TouchableHighlight} from "react-native";
+import {View, StyleSheet} from "react-native";
 
-import axios from 'axios';
-import {applyMiddleware, createStore} from "redux";
-import axiosMiddleware from 'redux-axios-middleware';
-
-import reducers from '../reducers';
 import RecipeList from '../RecipeList';
 import {Provider} from "react-redux";
+import configureStore from "../firestore/configureStore";
 
-const client = axios.create({
-    baseURL: 'http://localhost:9000',
-    responseType: 'json'
-});
-
-const store = createStore(reducers, applyMiddleware(axiosMiddleware(client)));
+const store = configureStore();
 
 export default class RecipeHome extends Component {
 

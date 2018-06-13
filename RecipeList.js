@@ -2,11 +2,16 @@ import React, {Component} from 'react';
 import {View, Text, FlatList, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 
-import {getRecipes} from './reducers';
+import {enhance} from './enhancers/RecipeHome.enhancer';
 
 class RecipeList extends Component {
-    componentDidMount() {
-        this.props.getRecipes();
+    static contextTypes = {
+        store: PropTypes.object.isRequired
+    };
+
+    componentWillMount() {
+        const {firestore} = this.context.store;
+        firestore.get('recipes');
     }
 
     renderItem = ({item}) => (
@@ -36,15 +41,8 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = state => {
-    let storedRecipes = state.recipes.map(recipe => ({key: recipe.id, ...recipe}));
-    return {
-        recipes: storedRecipes
-    };
-};
+export default enhance(RecipeList);
 
-const mapDispatchToProps = {
-    getRecipes: getRecipes
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(RecipeList);
+export default connect((state) => ({
+    recipes: state.firestore.ordered.recipes
+}));
